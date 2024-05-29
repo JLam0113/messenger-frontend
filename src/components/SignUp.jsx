@@ -1,5 +1,5 @@
 import { useForm } from 'react-hook-form';
-import './App.css'
+import { useNavigate } from 'react-router-dom';
 
 function SignUp() {
     const {
@@ -8,20 +8,20 @@ function SignUp() {
         formState: { errors },
     } = useForm();
 
-    //TODO SET HTTPCOOKIE FOR JWT AND REFRESH TOKEN
+    const navigate = useNavigate();
 
-    const onSubmit = (e) => {
+    const onSubmit = (data, e) => {
         e.preventDefault();
         const requestOptions = {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
-                username: e.email,
-                password: e.password,
+                username: data.email,
+                password: data.password,
             }),
         };
         fetch('http://localhost:3000/signup', requestOptions)
-            .then(this.props.history.push('/'));
+            .then(navigate('/'));
     }
 
     return (

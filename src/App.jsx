@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
-import './App.css'
-import Login from "./componenets/Login";
+import Login from "./components/Login";
 
 function App() {
   const [auth, setAuth] = useState(false)
@@ -8,12 +7,11 @@ function App() {
 
   useEffect(() => {
     const getAuth = async (url) => {
-      await fetch(url)
+      await fetch(url, { credentials: 'include' })
         .then((response) => response.json())
         .then((data) => {
-          console.log(data)
           setAuth(true)
-          setUser(data)
+          setUser(data.username)
         })
     }
     getAuth('http://localhost:3000/auth')
@@ -21,7 +19,7 @@ function App() {
 
   return (
     <>
-    {auth ? user + 'Logged in' : <Login />}
+      {auth ? user + ' is logged in' : <Login />}
     </>
   );
 }
