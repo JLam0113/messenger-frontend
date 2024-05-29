@@ -22,7 +22,7 @@ function Login() {
             }),
         };
         fetch('http://localhost:3000/login', requestOptions)
-            .then(navigate('/'));
+            .then(navigate(0));
     }
 
     const handleSignUp = () => {

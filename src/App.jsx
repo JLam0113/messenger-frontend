@@ -1,9 +1,12 @@
 import { useState, useEffect } from 'react';
 import Login from "./components/Login";
+import ChatRoom from "./components/ChatRoom";
+
 
 function App() {
   const [auth, setAuth] = useState(false)
   const [user, setUser] = useState('')
+  const [messages, setMessages] = useState([])
 
   useEffect(() => {
     const getAuth = async (url) => {
@@ -17,9 +20,21 @@ function App() {
     getAuth('http://localhost:3000/auth')
   }, []);
 
+  const chatRoomClick = async (e) => {
+    try {
+      await fetch('http://localhost:3000/chatroom/' + e.target.id)
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data)
+        })
+    } catch (err) {
+      console.log(err.message)
+    }
+  }
+
   return (
     <>
-      {auth ? user + ' is logged in' : <Login />}
+      {auth ? <ChatRoom chatRoomClick={chatRoomClick} /> : <Login />}
     </>
   );
 }
