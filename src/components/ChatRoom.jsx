@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-function ChatRoom({ chatRoomClick }) {
+function ChatRoom({ user, chatRoomClick }) {
     const [chatRooms, setChatRooms] = useState([])
 
     useEffect(() => {
@@ -14,7 +14,7 @@ function ChatRoom({ chatRoomClick }) {
                     }])
                 })
         }
-        getChatRooms('http://localhost:3000/chats')
+        getChatRooms('http://localhost:3000/chatroom?id' + user.id)
     }, []);
 
     return (

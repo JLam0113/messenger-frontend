@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import Login from "./components/Login";
 import ChatRoom from "./components/ChatRoom";
+import SearchBar from "./components/SearchBar";
 
 
 function App() {
@@ -14,7 +15,7 @@ function App() {
         .then((response) => response.json())
         .then((data) => {
           setAuth(true)
-          setUser(data.username)
+          setUser(data)
         })
     }
     getAuth('http://localhost:3000/auth')
@@ -32,9 +33,12 @@ function App() {
     }
   }
 
+  // use effect for chatroom connection?
+
   return (
     <>
-      {auth ? <ChatRoom chatRoomClick={chatRoomClick} /> : <Login />}
+      {auth ? <><SearchBar chatRoomClick={chatRoomClick}/> <ChatRoom user={user} chatRoomClick={chatRoomClick} /></>
+        : <Login />}
     </>
   );
 }
