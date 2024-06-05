@@ -10,7 +10,7 @@ function SignUp() {
 
     const navigate = useNavigate();
 
-    const onSubmit = (data, e) => {
+    const onSubmit = async (data, e) => {
         e.preventDefault();
         const requestOptions = {
             method: "POST",
@@ -20,8 +20,8 @@ function SignUp() {
                 password: data.password,
             }),
         };
-        fetch('http://localhost:3000/signup', requestOptions)
-            .then(navigate('/'));
+        await fetch('http://localhost:3000/signup', requestOptions)
+            .then(navigate(0));
     }
 
     return (

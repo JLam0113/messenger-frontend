@@ -10,19 +10,22 @@ function Login() {
 
     const navigate = useNavigate();
 
-    const onSubmit = (data, e) => {
-        e.preventDefault();
+    const onSubmit = async (data, event) => {
+        event.preventDefault();
         const requestOptions = {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: { 
+                "Content-Type": "application/json",
+                Accept:  "*/*" 
+            },
             credentials: 'include',
             body: JSON.stringify({
                 username: data.email,
                 password: data.password,
             }),
         };
-        fetch('http://localhost:3000/login', requestOptions)
-            .then(navigate(0));
+        await fetch('http://localhost:3000/login', requestOptions)
+        navigate(0)
     }
 
     const handleSignUp = () => {

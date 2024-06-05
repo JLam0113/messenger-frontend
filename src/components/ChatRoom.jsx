@@ -14,7 +14,7 @@ function ChatRoom({ user, chatRoomClick }) {
                     }])
                 })
         }
-        getChatRooms('http://localhost:3000/chatroom?id' + user.id)
+        getChatRooms('http://localhost:3000/chatroom?id=' + user.id)
     }, []);
 
     return (

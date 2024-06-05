@@ -15,7 +15,7 @@ function App() {
         .then((response) => response.json())
         .then((data) => {
           setAuth(true)
-          setUser(data)
+          setUser(data.username)
         })
     }
     getAuth('http://localhost:3000/auth')
