@@ -9,17 +9,15 @@ function SearchBar({ chatRoomClick }) {
         await fetch('http://localhost:3000/user?user=' + searchTerm, { credentials: 'include' })
             .then((response) => response.json())
             .then((data) => {
-                setUsers(users => [...users, {
-                    id: data.id,
-                    username: data.username,
-                }])
+                data.users.forEach((user) => {
+                    setUsers(users => [...users, {
+                        id: user.id,
+                        username: user.username,
+                    }])
+                })
             })
     }
     const debounced = useCallback(debounce(getUsers, 500), []);
-
-    useEffect(() => {
-        getUsers("");
-    }, []);
 
     return (
         <div>
@@ -28,17 +26,19 @@ function SearchBar({ chatRoomClick }) {
                 value={searchTerm}
                 onChange={(e) => {
                     setSearchTerm(e.target.value);
-                    debounced(e.target.value, 1000);
+                    if (e.target.value.length > 3) {
+                        debounced(e.target.value, 1000);
+                    }
                 }}
             />
-            <div>
+            <ol>
                 {users?.map((user) => (
-                    <div key={user.id}
+                    <li key={user.id}
                         onClick={chatRoomClick}>
                         {user.username}
-                    </div>
+                    </li>
                 ))}
-            </div>
+            </ol>
         </div>
     );
 }
