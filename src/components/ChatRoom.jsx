@@ -8,10 +8,12 @@ function ChatRoom({ user, chatRoomClick }) {
             await fetch(url, { credentials: 'include' })
                 .then((response) => response.json())
                 .then((data) => {
-                    setChatRooms(chatRooms => [...chatRooms, {
-                        id: data.id,
-                        username: data.username,
-                    }])
+                    if (data.id !== undefined || data.username !== undefined) {
+                        setChatRooms(chatRooms => [...chatRooms, {
+                            id: data.id,
+                            username: data.username,
+                        }])
+                    }
                 })
         }
         getChatRooms('http://localhost:3000/chatroom?id=' + user.id)
@@ -19,13 +21,13 @@ function ChatRoom({ user, chatRoomClick }) {
 
     return (
         <>
-            {chatRooms.map(element => (
+            {chatRooms.length > 0 ? chatRooms.map(element => (
                 <li key={element.id}
                     id={element.id}
                     onClick={chatRoomClick} >
                     {element.username}
                 </li>
-            ))}
+            )) : ''}
         </>
     )
 }

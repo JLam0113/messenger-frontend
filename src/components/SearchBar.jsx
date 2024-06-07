@@ -1,7 +1,7 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback } from 'react';
 import { debounce } from "lodash";
 
-function SearchBar({ chatRoomClick }) {
+function SearchBar({ chatRoomCreate }) {
     const [users, setUsers] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
 
@@ -11,7 +11,7 @@ function SearchBar({ chatRoomClick }) {
             .then((data) => {
                 data.users.forEach((user) => {
                     setUsers(users => [...users, {
-                        id: user.id,
+                        id: user._id,
                         username: user.username,
                     }])
                 })
@@ -25,20 +25,22 @@ function SearchBar({ chatRoomClick }) {
                 type="text"
                 value={searchTerm}
                 onChange={(e) => {
+                    setUsers([]);
                     setSearchTerm(e.target.value);
                     if (e.target.value.length > 3) {
                         debounced(e.target.value, 1000);
                     }
                 }}
             />
-            <ol>
+            <div>
                 {users?.map((user) => (
-                    <li key={user.id}
-                        onClick={chatRoomClick}>
-                        {user.username}
-                    </li>
+                    <button key={user.id}
+                        id={user.id}
+                        onClick={chatRoomCreate}>
+                            {user.username}
+                    </button>
                 ))}
-            </ol>
+            </div>
         </div>
     );
 }

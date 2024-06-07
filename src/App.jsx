@@ -15,7 +15,7 @@ function App() {
         .then((response) => response.json())
         .then((data) => {
           setAuth(true)
-          setUser(data.username)
+          setUser({ username: data.username, id: data.id })
         })
     }
     getAuth('http://localhost:3000/auth')
@@ -32,12 +32,36 @@ function App() {
       console.log(err.message)
     }
   }
+  const chatRoomCreate = async (e) => {
+    try {
+      console.log(e.target)
+      const users = [user.id, e.target.id]
+      const requestOptions = {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "*/*"
+        },
+        credentials: 'include',
+        body: JSON.stringify({
+          users: users,
+        }),
+      };
+      await fetch('http://localhost:3000/chatroom', requestOptions)
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data)
+        })
+    } catch (err) {
+      console.log(err.message)
+    }
+  }
 
   // use effect for chatroom connection?
 
   return (
     <>
-      {auth ? <><SearchBar chatRoomClick={chatRoomClick}/> <ChatRoom user={user} chatRoomClick={chatRoomClick} /></>
+      {auth ? <><SearchBar chatRoomCreate={chatRoomCreate} /> <ChatRoom user={user} chatRoomClick={chatRoomClick} /></>
         : <Login />}
     </>
   );
