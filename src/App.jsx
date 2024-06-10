@@ -6,7 +6,7 @@ import SearchBar from "./components/SearchBar";
 
 function App() {
   const [auth, setAuth] = useState(false)
-  const [user, setUser] = useState('')
+  const [user, setUser] = useState({})
   const [messages, setMessages] = useState([])
 
   useEffect(() => {
@@ -32,36 +32,12 @@ function App() {
       console.log(err.message)
     }
   }
-  const chatRoomCreate = async (e) => {
-    try {
-      console.log(e.target)
-      const users = [user.id, e.target.id]
-      const requestOptions = {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "*/*"
-        },
-        credentials: 'include',
-        body: JSON.stringify({
-          users: users,
-        }),
-      };
-      await fetch('http://localhost:3000/chatroom', requestOptions)
-        .then((response) => response.json())
-        .then((data) => {
-          console.log(data)
-        })
-    } catch (err) {
-      console.log(err.message)
-    }
-  }
 
   // use effect for chatroom connection?
 
   return (
     <>
-      {auth ? <><SearchBar chatRoomCreate={chatRoomCreate} /> <ChatRoom user={user} chatRoomClick={chatRoomClick} /></>
+      {auth ? <><SearchBar chatRoomCreate loggedInUserID={user.id}/> <ChatRoom user={user} chatRoomClick={chatRoomClick} /></>
         : <Login />}
     </>
   );
