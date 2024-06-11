@@ -16,7 +16,6 @@ function ChatRoom({ user, chatRoomClick }) {
                             }).filter((username) => {
                                 return typeof username === 'string'
                             })
-                            console.log(users)
                             setChatRooms(chatRooms => [...chatRooms, {
                                 id: chatRoom._id,
                                 users: users,

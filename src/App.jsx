@@ -23,7 +23,7 @@ function App() {
 
   const chatRoomClick = async (e) => {
     try {
-      await fetch('http://localhost:3000/chatroom/' + e.target.id)
+      await fetch('http://localhost:3000/chatroom/' + e.target.id, { credentials: 'include' })
         .then((response) => response.json())
         .then((data) => {
           console.log(data)
