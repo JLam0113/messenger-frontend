@@ -10,9 +10,16 @@ function ChatRoom({ user, chatRoomClick }) {
                 .then((data) => {
                     data.chatrooms.map((chatRoom) => {
                         if (chatRoom.id !== undefined || chatRoom.users !== undefined) {
+                            const users = chatRoom.users.map((element) => {
+                                if (user.username !== element.username)
+                                    return element.username;
+                            }).filter((username) => {
+                                return typeof username === 'string'
+                            })
+                            console.log(users)
                             setChatRooms(chatRooms => [...chatRooms, {
-                                id: chatRoom.id,
-                                users: chatRoom.users,
+                                id: chatRoom._id,
+                                users: users,
                             }])
                         }
                     })
@@ -23,14 +30,14 @@ function ChatRoom({ user, chatRoomClick }) {
 
     return (
         <>
-            <ol>{chatRooms.length > 0 ? chatRooms.map(element => (
+            {chatRooms.length > 0 ? chatRooms.map(element => (
                 <li key={element.id}
                     id={element.id}
                     onClick={chatRoomClick} >
                     {element.users}
                 </li>
             )) : ''}
-            </ol></>
+        </>
     )
 }
 
