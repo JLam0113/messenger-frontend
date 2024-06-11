@@ -1,13 +1,16 @@
 import { useState, useEffect } from 'react';
 import Login from "./components/Login";
 import ChatRoom from "./components/ChatRoom";
+import ChatBox from "./components/ChatBox";
 import SearchBar from "./components/SearchBar";
+import './App.css'
 
 
 function App() {
   const [auth, setAuth] = useState(false)
   const [user, setUser] = useState({})
   const [messages, setMessages] = useState([])
+  const [selectedChatRoom, setSelectedChatRoom] = useState('')
 
   useEffect(() => {
     const getAuth = async (url) => {
@@ -26,6 +29,7 @@ function App() {
       await fetch('http://localhost:3000/chatroom/' + e.target.id, { credentials: 'include' })
         .then((response) => response.json())
         .then((data) => {
+          setSelectedChatRoom(e.target.id)
           console.log(data)
         })
     } catch (err) {
@@ -36,10 +40,14 @@ function App() {
   // use effect for chatroom connection?
 
   return (
-    <>
-      {auth ? <><SearchBar chatRoomCreate loggedInUserID={user.id}/> <ChatRoom user={user} chatRoomClick={chatRoomClick} /></>
+    <div className="container clearfix">
+      {auth ? <>
+        <SearchBar chatRoomCreate loggedInUserID={user.id} />
+        <ChatRoom user={user} chatRoomClick={chatRoomClick} selectedChatRoom={selectedChatRoom} />
+        <ChatBox />
+      </>
         : <Login />}
-    </>
+    </div>
   );
 }
 

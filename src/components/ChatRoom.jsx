@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
+import '../App.css'
 
-function ChatRoom({ user, chatRoomClick }) {
+function ChatRoom({ user, chatRoomClick, selectedChatRoom }) {
     const [chatRooms, setChatRooms] = useState([])
 
     useEffect(() => {
@@ -28,15 +29,15 @@ function ChatRoom({ user, chatRoomClick }) {
     }, []);
 
     return (
-        <>
-            {chatRooms.length > 0 ? chatRooms.map(element => (
-                <li key={element.id}
+        <div className="people-list">
+            <ul className="list">{chatRooms.length > 0 ? chatRooms.map(element => (
+                <li className={selectedChatRoom == element.id ? "clearfix active" : "clearfix"} key={element.id}
                     id={element.id}
                     onClick={chatRoomClick} >
                     {element.users}
                 </li>
-            )) : ''}
-        </>
+            )) : ''}</ul>
+        </div>
     )
 }
 

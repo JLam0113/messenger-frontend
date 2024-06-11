@@ -1,6 +1,8 @@
 import { useState, useCallback } from 'react';
 import { debounce } from "lodash";
 import { useNavigate } from 'react-router-dom';
+import '../App.css';
+
 
 function SearchBar({ loggedInUserID }) {
     const [users, setUsers] = useState([]);
@@ -43,7 +45,7 @@ function SearchBar({ loggedInUserID }) {
     }
 
     return (
-        <div>
+        <div className="search">
             <input
                 type="text"
                 value={searchTerm}
