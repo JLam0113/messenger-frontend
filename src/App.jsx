@@ -9,7 +9,6 @@ import './App.css'
 function App() {
   const [auth, setAuth] = useState(false)
   const [user, setUser] = useState({})
-  const [messages, setMessages] = useState([])
   const [selectedChatRoom, setSelectedChatRoom] = useState('')
 
   useEffect(() => {
@@ -25,16 +24,7 @@ function App() {
   }, []);
 
   const chatRoomClick = async (e) => {
-    try {
-      await fetch('http://localhost:3000/chatroom/' + e.target.id, { credentials: 'include' })
-        .then((response) => response.json())
-        .then((data) => {
-          setSelectedChatRoom(e.target.id)
-          console.log(data)
-        })
-    } catch (err) {
-      console.log(err.message)
-    }
+    setSelectedChatRoom(e.target.id)
   }
 
   // use effect for chatroom connection?
@@ -44,7 +34,7 @@ function App() {
       {auth ? <>
         <SearchBar chatRoomCreate loggedInUserID={user.id} />
         <ChatRoom user={user} chatRoomClick={chatRoomClick} selectedChatRoom={selectedChatRoom} />
-        <ChatBox />
+        <ChatBox selectedChatRoom={selectedChatRoom} user={user} />
       </>
         : <Login />}
     </div>
