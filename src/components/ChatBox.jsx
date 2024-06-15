@@ -10,7 +10,16 @@ function ChatBox({ selectedChatRoom, user }) {
             await fetch(url, { credentials: 'include' })
                 .then((response) => response.json())
                 .then((data) => {
+                    console.log(selectedChatRoom)
                     console.log(data)
+                    data.messages.map((message) => {
+                        setMessageHistory(messageHistory => [...messageHistory, {
+                            id: message._id,
+                            user: message.user.username,
+                            message: message.message,
+                            date: message.date,
+                        }])
+                    })
                     // update message history
                 })
         }
@@ -27,15 +36,21 @@ function ChatBox({ selectedChatRoom, user }) {
                 },
                 credentials: 'include',
                 body: JSON.stringify({
-                    user: user,
+                    user: user.id,
                     chatroom: selectedChatRoom,
                     message: message,
                 }),
             };
-            await fetch('http://localhost:3000/chatroom', requestOptions)
+            await fetch('http://localhost:3000/message', requestOptions)
                 .then((response) => response.json())
                 .then((data) => {
                     console.log(data)
+                    setMessageHistory(messageHistory => [...messageHistory, {
+                        id: data.response._id,
+                        user: user.username,
+                        message: data.response.message,
+                        date: data.response.date,
+                    }])
                     // update message history
                 })
         } catch (err) {
@@ -46,7 +61,17 @@ function ChatBox({ selectedChatRoom, user }) {
     return (
         <div className="chat">
             <div className="chat-history">
-
+            <ul className="">{messageHistory.length > 0 ? messageHistory.map(element => (
+                <li className="" key={element.id}
+                    id={element.id}
+                     >
+                    {element.user}
+                    <br></br>
+                    {element.message}
+                    <br></br>
+                    {element.date}
+                </li>
+            )) : ''}</ul>
             </div>
             <div className="chat-message clearfix">
                 <textarea name="message" id="message" placeholder="Type your message" rows="3"

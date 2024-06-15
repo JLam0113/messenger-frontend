@@ -34,7 +34,7 @@ function App() {
       {auth ? <>
         <SearchBar chatRoomCreate loggedInUserID={user.id} />
         <ChatRoom user={user} chatRoomClick={chatRoomClick} selectedChatRoom={selectedChatRoom} />
-        <ChatBox selectedChatRoom={selectedChatRoom} user={user} />
+        {selectedChatRoom !== '' ? <ChatBox selectedChatRoom={selectedChatRoom} user={user} /> : ''}
       </>
         : <Login />}
     </div>
