@@ -61,17 +61,25 @@ function ChatBox({ selectedChatRoom, user }) {
     return (
         <div className="chat">
             <div className="chat-history">
-            <ul className="">{messageHistory.length > 0 ? messageHistory.map(element => (
-                <li className="" key={element.id}
-                    id={element.id}
-                     >
-                    {element.user}
-                    <br></br>
-                    {element.message}
-                    <br></br>
-                    {element.date}
-                </li>
-            )) : ''}</ul>
+                <ul className="">
+                    {messageHistory.length > 0 ? messageHistory.map(element => (
+                        <li key={element.id} id={element.id}>
+                            {element.user == user.username ?
+                                <div className="message-data align-right">
+                                    <span className="message-data-time">{element.date}</span>
+                                    <span className="message-data-name">{element.username}</span>
+                                </div> :
+                                <div className="message-data">
+                                    <span className="message-data-name">{element.username}</span>
+                                    <span className="message-data-time">{element.date}</span>
+                                </div>
+                            }
+                            <div className={element.user == user.username ? "message other-message float-right" : "message my-message"}>
+                                {element.message}
+                            </div>
+                        </li>
+                    )) : ''}
+                </ul>
             </div>
             <div className="chat-message clearfix">
                 <textarea name="message" id="message" placeholder="Type your message" rows="3"
