@@ -1,17 +1,16 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import '../App.css'
 
 function ChatBox({ selectedChatRoom, user }) {
     const [message, setMessage] = useState('')
     const [messageHistory, setMessageHistory] = useState([])
+    const chatHistory = useRef(null)
 
     useEffect(() => {
         const getMessages = async (url) => {
             await fetch(url, { credentials: 'include' })
                 .then((response) => response.json())
                 .then((data) => {
-                    console.log(selectedChatRoom)
-                    console.log(data)
                     data.messages.map((message) => {
                         setMessageHistory(messageHistory => [...messageHistory, {
                             id: message._id,
@@ -20,13 +19,18 @@ function ChatBox({ selectedChatRoom, user }) {
                             date: message.date,
                         }])
                     })
-                    // update message history
                 })
         }
         getMessages('http://localhost:3000/chatroom/' + selectedChatRoom)
     }, []);
 
+    // TODO SCROLL TO BOTTOM OF CHAT BOX
+    useEffect(() => {
+        chatHistory.current.scrollIntoView({ behavior: 'smooth' })
+    }, [messageHistory])
+
     const sendMessage = async (e) => {
+        setMessage('')
         try {
             const requestOptions = {
                 method: "POST",
@@ -44,14 +48,12 @@ function ChatBox({ selectedChatRoom, user }) {
             await fetch('http://localhost:3000/message', requestOptions)
                 .then((response) => response.json())
                 .then((data) => {
-                    console.log(data)
                     setMessageHistory(messageHistory => [...messageHistory, {
                         id: data.response._id,
                         user: user.username,
                         message: data.response.message,
                         date: data.response.date,
                     }])
-                    // update message history
                 })
         } catch (err) {
             console.log(err.message)
@@ -60,17 +62,17 @@ function ChatBox({ selectedChatRoom, user }) {
 
     return (
         <div className="chat">
-            <div className="chat-history">
+            <div className="chat-history" ref={chatHistory}>
                 <ul className="">
                     {messageHistory.length > 0 ? messageHistory.map(element => (
                         <li key={element.id} id={element.id}>
                             {element.user == user.username ?
                                 <div className="message-data align-right">
                                     <span className="message-data-time">{element.date}</span>
-                                    <span className="message-data-name">{element.username}</span>
+                                    <span className="message-data-name">{element.user}</span>
                                 </div> :
                                 <div className="message-data">
-                                    <span className="message-data-name">{element.username}</span>
+                                    <span className="message-data-name">{element.user}</span>
                                     <span className="message-data-time">{element.date}</span>
                                 </div>
                             }
