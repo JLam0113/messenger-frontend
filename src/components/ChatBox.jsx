@@ -7,11 +7,12 @@ function ChatBox({ selectedChatRoom, user }) {
     const chatHistory = useRef(null)
 
     useEffect(() => {
+        setMessageHistory([])
         const getMessages = async (url) => {
             await fetch(url, { credentials: 'include' })
                 .then((response) => response.json())
                 .then((data) => {
-                    data.messages.map((message) => {
+                    data.messages.forEach((message) => {
                         setMessageHistory(messageHistory => [...messageHistory, {
                             id: message._id,
                             user: message.user.username,

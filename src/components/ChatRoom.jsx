@@ -9,7 +9,7 @@ function ChatRoom({ user, chatRoomClick, selectedChatRoom }) {
             await fetch(url, { credentials: 'include' })
                 .then((response) => response.json())
                 .then((data) => {
-                    data.chatrooms.map((chatRoom) => {
+                    data.chatrooms.forEach((chatRoom) => {
                         if (chatRoom.id !== undefined || chatRoom.users !== undefined) {
                             const users = chatRoom.users.map((element) => {
                                 if (user.username !== element.username)
