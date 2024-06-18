@@ -26,11 +26,11 @@ function ChatBox({ selectedChatRoom, user }) {
 
     // TODO SCROLL TO BOTTOM OF CHAT BOX
     useEffect(() => {
-        chatHistory.current.scrollIntoView({ behavior: 'smooth' })
+        chatHistory.current?.scrollIntoView({ behavior: "instant" })
     }, [messageHistory])
 
     const sendMessage = async (e) => {
-        setMessage('')
+        e.preventDefault()
         try {
             const requestOptions = {
                 method: "POST",
@@ -55,6 +55,9 @@ function ChatBox({ selectedChatRoom, user }) {
                         date: data.response.date,
                     }])
                 })
+                setMessage('')
+                chatHistory.current?.scrollIntoView({ behavior: "instant" })
+
         } catch (err) {
             console.log(err.message)
         }
@@ -62,7 +65,7 @@ function ChatBox({ selectedChatRoom, user }) {
 
     return (
         <div className="chat">
-            <div className="chat-history" ref={chatHistory}>
+            <div className="chat-history">
                 <ul className="">
                     {messageHistory.length > 0 ? messageHistory.map(element => (
                         <li key={element.id} id={element.id}>
@@ -82,12 +85,14 @@ function ChatBox({ selectedChatRoom, user }) {
                         </li>
                     )) : ''}
                 </ul>
+                <div ref={chatHistory}/>
             </div>
             <div className="chat-message clearfix">
                 <textarea name="message" id="message" placeholder="Type your message" rows="3"
                     onChange={(e) => {
                         setMessage(e.target.value);
-                    }} />
+                    }}
+                    value={message} />
                 <button onClick={sendMessage}>Send</button>
             </div>
         </div>
