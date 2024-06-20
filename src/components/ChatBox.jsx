@@ -1,9 +1,11 @@
 import { useState, useEffect, useRef } from 'react';
+import { io } from "socket.io-client"
 import '../App.css'
 
 function ChatBox({ selectedChatRoom, user }) {
     const [message, setMessage] = useState('')
     const [messageHistory, setMessageHistory] = useState([])
+    const [socket, setSocket] = useState(null);
     const chatHistory = useRef(null)
 
     useEffect(() => {
@@ -12,12 +14,12 @@ function ChatBox({ selectedChatRoom, user }) {
             await fetch(url, { credentials: 'include' })
                 .then((response) => response.json())
                 .then((data) => {
-                    data.messages.forEach((message) => {
+                    data?.messages?.forEach((message) => {
                         setMessageHistory(messageHistory => [...messageHistory, {
-                            id: message._id,
-                            user: message.user.username,
-                            message: message.message,
-                            date: message.date,
+                            id: message?._id,
+                            user: message?.user.username,
+                            message: message?.message,
+                            date: message?.date,
                         }])
                     })
                 })
@@ -25,7 +27,25 @@ function ChatBox({ selectedChatRoom, user }) {
         getMessages('http://localhost:3000/chatroom/' + selectedChatRoom)
     }, []);
 
-    // TODO SCROLL TO BOTTOM OF CHAT BOX
+    useEffect(() => {
+        setSocket(io("http://localhost:3000"));
+    }, [])
+
+    useEffect(() => {
+
+        socket?.emit("addUser", user?.id);
+
+        socket?.on("getMessage", message => {
+            setMessageHistory(messageHistory => [...messageHistory, {
+                id: message?._id,
+                user: message?.user.username,
+                message: message?.message,
+                date: message?.date,
+            }])
+
+        })
+    }, [socket])
+
     useEffect(() => {
         chatHistory.current?.scrollIntoView({ behavior: "instant" })
     }, [messageHistory])
@@ -55,9 +75,16 @@ function ChatBox({ selectedChatRoom, user }) {
                         message: data.response.message,
                         date: data.response.date,
                     }])
+                    socket?.emit("sendMessage", {
+                        id: data.response._id,
+                        chatroom: selectedChatRoom,
+                        user: user.id,
+                        message: data.response.message,
+                        date: data.response.date,
+                    });
                 })
-                setMessage('')
-                chatHistory.current?.scrollIntoView({ behavior: "instant" })
+            setMessage('')
+            chatHistory.current?.scrollIntoView({ behavior: "instant" })
 
         } catch (err) {
             console.log(err.message)
@@ -86,7 +113,7 @@ function ChatBox({ selectedChatRoom, user }) {
                         </li>
                     )) : ''}
                 </ul>
-                <div ref={chatHistory}/>
+                <div ref={chatHistory} />
             </div>
             <div className="chat-message clearfix">
                 <textarea name="message" id="message" placeholder="Type your message" rows="3"
