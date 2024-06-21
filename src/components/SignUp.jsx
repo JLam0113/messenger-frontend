@@ -21,7 +21,7 @@ function SignUp() {
             }),
         };
         await fetch('http://localhost:3000/signup', requestOptions)
-            .then(navigate(0));
+        navigate(0);
     }
 
     return (
