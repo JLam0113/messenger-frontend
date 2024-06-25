@@ -36,9 +36,10 @@ function ChatBox({ selectedChatRoom, user }) {
         socket?.emit("addUser", user?.id);
 
         socket?.on("getMessage", message => {
+            console.log(message);
             setMessageHistory(messageHistory => [...messageHistory, {
-                id: message?._id,
-                user: message?.user.username,
+                id: message?.id,
+                user: message?.username,
                 message: message?.message,
                 date: message?.date,
             }])
@@ -70,17 +71,17 @@ function ChatBox({ selectedChatRoom, user }) {
                 .then((response) => response.json())
                 .then((data) => {
                     setMessageHistory(messageHistory => [...messageHistory, {
-                        id: data.response._id,
+                        id: data._id,
                         user: user.username,
-                        message: data.response.message,
-                        date: data.response.date,
+                        message: data.message,
+                        date: data.date,
                     }])
                     socket?.emit("sendMessage", {
-                        id: data.response._id,
-                        chatroom: selectedChatRoom,
-                        user: user.id,
-                        message: data.response.message,
-                        date: data.response.date,
+                        messageID: data._id,
+                        chatroomID: selectedChatRoom,
+                        senderID: user.id,
+                        message: data.message,
+                        date: data.date,
                     });
                 })
             setMessage('')

@@ -27,8 +27,6 @@ function App() {
     setSelectedChatRoom(e.target.id)
   }
 
-  // use effect for chatroom connection?
-
   return (
     <div className="container clearfix">
       {auth ? <>
