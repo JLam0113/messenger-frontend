@@ -25,7 +25,7 @@ function ChatBox({ selectedChatRoom, user }) {
                 })
         }
         getMessages('http://localhost:3000/chatroom/' + selectedChatRoom)
-    }, []);
+    }, [selectedChatRoom]);
 
     useEffect(() => {
         setSocket(io("http://localhost:3000"));
